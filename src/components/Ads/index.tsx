@@ -1,6 +1,4 @@
-import { Icon } from "@iconify/react";
 import { Button } from "../ui/button";
-import { Ads2 } from "../Ads2";
 
 export function Ads() {
   return (
