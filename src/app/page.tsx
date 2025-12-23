@@ -1,10 +1,11 @@
 import { Ads } from "@/components/Ads";
 import { Dna } from "@/components/Dna";
 import Ecommerce from "@/components/Ecommerce";
+import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Headline } from "@/components/Headline";
 import Logos from "@/components/Logos";
-import { News } from "@/components/News";
+import  News  from "@/components/News";
 import { Roi } from "@/components/Roi";
 import { SectionImage } from "@/components/SectionImage";
 import SectionVideo from "@/components/SectionVideo";
@@ -16,6 +17,7 @@ export default function Home() {
   return (
     <>
     <Header></Header>
+    <main>
     <Headline></Headline>
     <Logos></Logos>
     <Ecommerce></Ecommerce>
@@ -25,7 +27,9 @@ export default function Home() {
     <Roi></Roi>
     <SectionImage></SectionImage>
     <Dna></Dna>
-    {/* <News></News> */}
+    <News></News>
+    </main>
+    <Footer></Footer>
     </>
   );
 }
