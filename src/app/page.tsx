@@ -20,10 +20,10 @@ export default function Home() {
     <main>
     <Headline></Headline>
     <Logos></Logos>
+    <Steps></Steps>
     <Ecommerce></Ecommerce>
     <Ads></Ads>
     <Setors></Setors>
-    <Steps></Steps>
     <Roi></Roi>
     <SectionImage></SectionImage>
     <Dna></Dna>

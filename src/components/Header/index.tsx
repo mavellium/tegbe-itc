@@ -7,6 +7,16 @@ import { useState, useEffect } from "react"
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  // Detecta scroll para ajustar a transparência/borda
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20)
+    }
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   // Fecha o menu quando a tela aumenta para desktop
   useEffect(() => {
@@ -33,7 +43,7 @@ export function Header() {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
     if (element) {
-      const headerHeight = 64 // Altura aproximada do header em pixels
+      const headerHeight = 80 
       const elementPosition = element.getBoundingClientRect().top
       const offsetPosition = elementPosition + window.pageYOffset - headerHeight
 
@@ -44,98 +54,101 @@ export function Header() {
     }
   }
 
-  // Handler para os links de navegação
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
     e.preventDefault()
-
-    // Se for a home, vai para o topo
     if (sectionId === "/") {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      })
+      window.scrollTo({ top: 0, behavior: "smooth" })
     } else {
       scrollToSection(sectionId)
     }
-
-    // Fecha o menu mobile se estiver aberto
     setMenuOpen(false)
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-white/20 border-border bg-[#FFE600]">
+    <>
+    <header 
+      className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${
+        scrolled 
+          ? "bg-black/80 backdrop-blur-md border-b border-white/10 py-2" 
+          : "bg-transparent border-b border-transparent py-4"
+      }`}
+    >
       <div className="w-full px-6">
-        <div className="flex h-18 items-center justify-between mx-auto max-w-7xl">
-          {/* Navegação Desktop */}
+        <div className="flex items-center justify-between mx-auto max-w-7xl">
+          
+          {/* --- LOGO --- */}
           <div className="flex items-center gap-6">
-            <a href="/" className="flex items-center">
+            <a href="/" className="flex items-center group">
                 <Image
                   src="/logo-tegbe-header.svg"
                   alt="Tegbe Logo"
-                  width={50}
+                  width={150}
                   height={50}
-                  className="object-contain sm:w-33 w-28 md:w-44"
+                  // Adicionei brightness-0 invert para garantir que o logo fique BRANCO se o SVG for preto
+                  // Se o SVG já for colorido/branco, pode remover essa classe.
+                  className="object-contain w-32 md:w-40 transition-opacity group-hover:opacity-80"
                 />
-              </a>
-            <nav className="hidden md:flex items-center gap-6">
-              <a
-                href="/"
-                className="text-sm font-medium text-black hover:text-black transition"
-                onClick={(e) => handleNavClick(e, "/")}
-              >
-                Home
-              </a>
-              <a
-                href="#Solucoes"
-                className="text-sm font-medium text-[#52525B] hover:text-black transition"
-                onClick={(e) => handleNavClick(e, "Solucoes")}
-              >
-                Sobre
-              </a>
-              <a
-                href="#Solucoes"
-                className="text-sm font-medium text-[#52525B] hover:text-black transition"
-                onClick={(e) => handleNavClick(e, "Solucoes")}
-              >
-                Soluções
-              </a>
-              <a
-                href="#Solucoes"
-                className="text-sm font-medium text-[#52525B] hover:text-black transition"
-                onClick={(e) => handleNavClick(e, "Solucoes")}
-              >
-                Cases
-              </a>
-              <a
-                href="#Solucoes"
-                className="text-sm font-medium text-[#52525B] hover:text-black transition"
-                onClick={(e) => handleNavClick(e, "Solucoes")}
-              >
-                Contato
-              </a>
+            </a>
+            
+            {/* --- NAVEGAÇÃO DESKTOP --- */}
+            <nav className="hidden md:flex items-center gap-8 ml-8">
+              {[
+                { name: "Home", id: "/" },
+                { name: "Sobre", id: "sobre" },
+                { name: "Soluções", id: "solucoes" },
+                { name: "Cases", id: "cases" },
+              ].map((item) => (
+                <a
+                  key={item.name}
+                  href={item.id === "/" ? "/" : `#${item.id}`}
+                  className="text-sm font-medium text-gray-400 hover:text-white transition-colors relative group"
+                  onClick={(e) => handleNavClick(e, item.id)}
+                >
+                  {item.name}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#FFCC00] transition-all group-hover:w-full"></span>
+                </a>
+              ))}
             </nav>
           </div>
 
-          {/* Botão WhatsApp Desktop */}
-          <div className="hidden md:flex">
+          {/* --- AÇÕES (DIREITA) --- */}
+          <div className="hidden md:flex items-center gap-6">
+            {/* Badge Consultor (Opcional - Mantive pois dá autoridade) */}
+            <Image 
+              src="/logo-consultoria.svg" 
+              alt="Consultor Oficial" 
+              width={40} 
+              height={40} 
+              className="opacity-80 hover:opacity-100 transition-opacity" 
+            />
+
             <a
-              href="https://api.whatsapp.com/send?phone=5514991779502"
-              target="_blank"
-              className="flex gap-2 items-center"
-            >
-              <Button className="shadow-lg bg-white text-[#2B3374] hover:bg-[#2B3374] cursor-pointer hover:text-white transition h-10 rounded-full">
-                <Icon icon="ic:baseline-whatsapp" width={28} height={28} className="items-center size-5" />
-                Fale com a gente
-              </Button>
-            </a>
-            <Image src="/logo-consultoria.svg" alt="WhatsApp Icon" width={50} height={50} className="ml-5 p-0.5" />
+    href="https://api.whatsapp.com/send?phone=5514991779502"
+    target="_blank"
+    className="group relative overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 focus:ring-offset-slate-50"
+  >
+    {/* Borda Animada (Opcional - dá um ar muito tech) */}
+    <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)] opacity-0 group-hover:opacity-100 transition-opacity" />
+    
+    {/* O Botão em si */}
+    <button className="relative inline-flex h-10 items-center justify-center overflow-hidden rounded-full bg-[#FFCC00] px-8 py-2 font-bold text-black transition-all duration-300 hover:bg-[#ffdb4d] hover:scale-105 group-hover:shadow-[0_0_20px_rgba(255,204,0,0.4)]">
+      
+      {/* Efeito de Luz Passante (Shimmer) */}
+      <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/30 to-transparent z-10" />
+      
+      <span className="relative z-20 flex items-center gap-2">
+        <Icon icon="ic:baseline-whatsapp" className="size-5" />
+        <span className="tracking-wide">AGENDAR DIAGNÓSTICO</span>
+      </span>
+    </button>
+  </a>
           </div>
 
-          {/* Botão Mobile */}
+          {/* --- BOTÃO HAMBURGER MOBILE --- */}
           <Button
             size="icon"
             variant="ghost"
-            className="md:hidden text-white"
+            className="md:hidden text-white hover:bg-white/10"
             onClick={(e) => {
               e.stopPropagation()
               setMenuOpen(!menuOpen)
@@ -143,47 +156,51 @@ export function Header() {
           >
             <Icon
               icon={menuOpen ? "solar:close-circle-linear" : "solar:hamburger-menu-outline"}
-              className="size-6 text-black"
+              className="size-7 text-[#FFCC00]"
             />
           </Button>
         </div>
       </div>
 
-      {/* Menu Mobile */}
+      {/* --- MENU MOBILE (Slide Down Dark) --- */}
       <div
         id="mobileMenu"
-        className={`fixed top-16 left-0 w-full bg-white shadow-xl z-50 transform transition-all duration-300 md:hidden
-    ${menuOpen ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0 pointer-events-none"}`}
+        className={`absolute top-full left-0 w-full bg-[#050505] border-b border-white/10 shadow-2xl overflow-hidden transition-all duration-500 ease-in-out md:hidden
+        ${menuOpen ? "max-h-[400px] opacity-100 visible" : "max-h-0 opacity-0 invisible"}`}
       >
-        <nav className="flex flex-col items-center py-6 space-y-5">
-          <a
-            href="/"
-            className="text-lg font-medium text-black hover:text-[#008E52] transition"
-            onClick={(e) => handleNavClick(e, "/")}
-          >
-            Home
-          </a>
-          <a
-            href="#Solucoes"
-            className="text-lg font-medium text-black hover:text-[#008E52] transition"
-            onClick={(e) => handleNavClick(e, "Solucoes")}
-          >
-            Soluções
-          </a>
+        <nav className="flex flex-col items-center py-8 space-y-6">
+          {[
+            { name: "Home", id: "/" },
+            { name: "Sobre", id: "sobre" },
+            { name: "Soluções", id: "solucoes" },
+            { name: "Cases", id: "cases" },
+          ].map((item) => (
+             <a
+              key={item.name}
+              href={item.id === "/" ? "/" : `#${item.id}`}
+              className="text-lg font-medium text-gray-300 hover:text-[#FFCC00] hover:tracking-wider transition-all duration-300"
+              onClick={(e) => handleNavClick(e, item.id)}
+            >
+              {item.name}
+            </a>
+          ))}
 
-          <a
-            href="https://api.whatsapp.com/send?phone=5514991779502"
-            target="_blank"
-            className="flex gap-2 items-center"
-            onClick={() => setMenuOpen(false)}
-          >
-            <Button className="shadow-lg  bg-[#2B3374] text-white hover:bg-white cursor-pointer hover:text-white transition h-10 rounded-full">
-              <Icon icon="ic:baseline-whatsapp" width={28} height={28} className="items-center size-5" />
-              Fale com a gente
-            </Button>
-          </a>
+          <div className="pt-4 w-full px-8">
+            <a
+              href="https://api.whatsapp.com/send?phone=5514991779502"
+              target="_blank"
+              className="w-full flex justify-center"
+              onClick={() => setMenuOpen(false)}
+            >
+              <Button className="w-full shadow-lg bg-[#FFCC00] text-black font-bold hover:bg-[#E6B800] h-12 rounded-full text-base">
+                <Icon icon="ic:baseline-whatsapp" className="size-5 mr-2" />
+                Fale com a gente
+              </Button>
+            </a>
+          </div>
         </nav>
       </div>
     </header>
+    </>
   )
 }

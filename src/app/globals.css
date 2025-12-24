@@ -445,34 +445,44 @@ body {
     }
 
     footer {
-        @apply container mx-auto py-7 max-lg:px-5;
+    /* MUDANÇA CRUCIAL:
+       Removi 'container' e 'mx-auto'. 
+       Agora o footer ocupa 100% da largura da tela.
+    */
+    @apply w-full py-0; 
 
-        .info {
-            @apply flex-between;
+    /* Se você estiver usando classes específicas dentro do footer 
+       (como .info, .links), mantenha o CSS abaixo. 
+       Caso esteja usando o componente 100% Tailwind que enviei antes, 
+       essas classes abaixo podem ser removidas pois o estilo está direto no TSX.
+    */
 
-            p {
-                @apply text-sm font-medium;
+    .info {
+        @apply flex justify-between items-center; /* 'flex-between' não é padrão tailwind, ajustei para padrão */
 
-                span {
-                    @apply text-primary mx-0.5;
-                }
-            }
-        }
+        p {
+            @apply text-sm font-medium;
 
-        hr {
-            @apply my-7 text-[#424245];
-        }
-
-        .links {
-            @apply flex flex-col lg:flex-row lg:items-center justify-between max-lg:mt-5 gap-5 text-sm;
-
-            ul {
-                @apply lg:divide-x flex flex-col lg:flex-row gap-2.5;
-
-                li {
-                    @apply lg:px-5 cursor-pointer hover:text-primary transition-all duration-300 ease-in-out;
-                }
+            span {
+                @apply text-[#FFCC00] mx-0.5; /* Ajustei para a cor da marca (Amarelo) */
             }
         }
     }
+
+    hr {
+        @apply my-7 text-white/10; /* Ajustei para ficar sutil no fundo escuro */
+    }
+
+    .links {
+        @apply flex flex-col lg:flex-row lg:items-center justify-between max-lg:mt-5 gap-5 text-sm;
+
+        ul {
+            @apply lg:divide-x lg:divide-gray-700 flex flex-col lg:flex-row gap-2.5;
+
+            li {
+                @apply lg:px-5 cursor-pointer hover:text-[#FFCC00] transition-all duration-300 ease-in-out;
+            }
+        }
+    }
+}
 }

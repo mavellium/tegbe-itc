@@ -2,50 +2,58 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, useMotionValue, useTransform, animate, PanInfo } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, TrendingUp } from 'lucide-react';
+import { Icon } from '@iconify/react';
 
+// Dados simulados (Mantive os seus, só adicionei IDs visuais se precisar)
 const testimonials = [
   {
     id: 1,
-    logo: "/Image-news.png",
+    logo: "/equipe.png", // Usei a imagem da equipe como placeholder, troque pelas logos reais
     name: "Decora Fest",
-    description: "Loja de Decorações para Festas em Garça/SP",
-    result: "Aumento de 30% nas Vendas desde o que estão conosco"
+    description: "Loja de Decorações • Garça/SP",
+    result: "Aumento de 30% nas Vendas",
+    tags: ["E-commerce", "Gestão"]
   },
   {
     id: 2,
-    logo: "/Image-news.png",
+    logo: "/equipe.png",
     name: "Tech Solutions",
-    description: "Empresa de Tecnologia em São Paulo/SP",
-    result: "Redução de 40% no tempo de atendimento ao cliente"
+    description: "Tecnologia • São Paulo/SP",
+    result: "Redução de 40% no SLA",
+    tags: ["Automação", "Processos"]
   },
   {
     id: 3,
-    logo: "/Image-news.png",
+    logo: "/equipe.png",
     name: "Bella Moda",
-    description: "Boutique de Moda Feminina em Marília/SP",
-    result: "Crescimento de 50% no engajamento nas redes sociais"
+    description: "Moda Feminina • Marília/SP",
+    result: "+50% Engajamento Social",
+    tags: ["Social Media", "Branding"]
   },
   {
     id: 4,
-    logo: "/Image-news.png",
+    logo: "/equipe.png",
     name: "Sabor & Arte",
-    description: "Restaurante Gourmet em Bauru/SP",
-    result: "Aumento de 25% nas reservas online"
+    description: "Gastronomia • Bauru/SP",
+    result: "Aumento de 25% nas Reservas",
+    tags: ["Tráfego Local", "Google"]
   },
   {
     id: 5,
-    logo: "/Image-news.png",
+    logo: "/equipe.png",
     name: "FitLife Academia",
-    description: "Academia Premium em Ribeirão Preto/SP",
-    result: "45% mais matrículas após parceria"
+    description: "Fitness • Ribeirão Preto/SP",
+    result: "45% mais Matrículas",
+    tags: ["Leads", "Vendas"]
   },
   {
     id: 6,
-    logo: "/Image-news.png",
+    logo: "/equipe.png",
     name: "Pet Care Plus",
-    description: "Pet Shop e Veterinária em Campinas/SP",
-    result: "Triplicou o número de clientes recorrentes"
+    description: "Veterinária • Campinas/SP",
+    result: "3x Clientes Recorrentes",
+    tags: ["CRM", "Fidelização"]
   }
 ];
 
@@ -57,17 +65,16 @@ export default function News() {
   
   const x = useMotionValue(0);
 
-  // Responsive card width and gap
+  // Lógica Responsiva (Mantida e Ajustada para Design System)
   const getCardWidth = () => {
-    if (containerWidth < 640) return containerWidth - 80; // mobile: full width with padding
-    if (containerWidth < 768) return containerWidth * 0.8; // tablet: 80% width
-    return 320; // desktop: fixed width
+    if (containerWidth < 640) return containerWidth - 48; // Mobile: quase full width
+    if (containerWidth < 1024) return 340; // Tablet
+    return 380; // Desktop: Cards mais robustos
   };
 
   const getCardGap = () => {
     if (containerWidth < 640) return 16;
-    if (containerWidth < 768) return 20;
-    return 24;
+    return 32; // Mais respiro no desktop
   };
 
   useEffect(() => {
@@ -85,7 +92,7 @@ export default function News() {
   const cardWidth = getCardWidth();
   const cardGap = getCardGap();
   const visibleCards = containerWidth < 640 ? 1 : 
-                       containerWidth < 768 ? 2 : 
+                       containerWidth < 1024 ? 2 : 
                        Math.floor(containerWidth / (cardWidth + cardGap));
   const maxIndex = Math.max(0, testimonials.length - visibleCards);
 
@@ -94,8 +101,8 @@ export default function News() {
     setCurrentIndex(newIndex);
     animate(x, -newIndex * (cardWidth + cardGap), {
       type: "spring",
-      stiffness: 300,
-      damping: 30
+      stiffness: 200, // Mais suave (Luxo)
+      damping: 25
     });
   };
 
@@ -104,8 +111,8 @@ export default function News() {
     setCurrentIndex(newIndex);
     animate(x, -newIndex * (cardWidth + cardGap), {
       type: "spring",
-      stiffness: 300,
-      damping: 30
+      stiffness: 200,
+      damping: 25
     });
   };
 
@@ -126,20 +133,58 @@ export default function News() {
     setCurrentIndex(newIndex);
     animate(x, -newIndex * (cardWidth + cardGap), {
       type: "spring",
-      stiffness: 300,
-      damping: 30
+      stiffness: 200,
+      damping: 25
     });
   };
 
   return (
-    <section className="py-8 sm:py-12 md:py-16 px-4 sm:px-6 md:px-8 bg-[#f5f5f5]">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-6 sm:mb-8 md:mb-10 text-center sm:text-left">
-          Seja que nem eles
-        </h2>
+    <section className="py-20 sm:py-24 px-4 sm:px-6 md:px-8 bg-[#050505] relative overflow-hidden">
+      
+      {/* Background Ambience (Spotlight Azulado Sutil) */}
+      <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[600px] h-[600px] bg-blue-900/10 rounded-full blur-[120px] pointer-events-none" />
 
+      <div className="max-w-7xl mx-auto relative z-10">
+        
+        {/* Cabeçalho da Seção */}
+        <div className="flex flex-col sm:flex-row justify-between items-end mb-12 sm:mb-16 gap-6">
+          <div className="text-center sm:text-left">
+            <div className="inline-flex items-center gap-2 mb-4 px-3 py-1 rounded-full border border-gray-800 bg-gray-900/50 backdrop-blur-sm">
+                <Icon icon="solar:graph-up-bold" className="text-[#FFCC00] w-4 h-4" />
+                <span className="text-xs font-semibold text-gray-300 tracking-wider uppercase">
+                    Track Record
+                </span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight">
+              Resultados que <br className="hidden sm:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFCC00] to-yellow-600">falam por si.</span>
+            </h2>
+          </div>
+
+          {/* Botões de Navegação (Desktop) */}
+          <div className="hidden sm:flex gap-3">
+            <motion.button
+              onClick={handlePrev}
+              disabled={currentIndex === 0}
+              className="w-12 h-12 rounded-full border border-white/10 bg-white/5 hover:bg-[#FFCC00] hover:border-[#FFCC00] hover:text-black disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-white disabled:cursor-not-allowed flex items-center justify-center text-white transition-all duration-300"
+              whileTap={{ scale: 0.95 }}
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </motion.button>
+            <motion.button
+              onClick={handleNext}
+              disabled={currentIndex >= maxIndex}
+              className="w-12 h-12 rounded-full border border-white/10 bg-white/5 hover:bg-[#FFCC00] hover:border-[#FFCC00] hover:text-black disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-white disabled:cursor-not-allowed flex items-center justify-center text-white transition-all duration-300"
+              whileTap={{ scale: 0.95 }}
+            >
+              <ChevronRight className="w-6 h-6" />
+            </motion.button>
+          </div>
+        </div>
+
+        {/* Área do Carrossel */}
         <div className="relative" ref={containerRef}>
-          <div className="overflow-hidden px-2 sm:px-0">
+          <div className="overflow-hidden px-2 py-4 -mx-2 -my-4"> {/* Margem negativa para sombra não cortar */}
             <motion.div
               className="flex"
               style={{ x, gap: `${cardGap}px` }}
@@ -153,18 +198,15 @@ export default function News() {
               onDragEnd={handleDragEnd}
             >
               {testimonials.map((item, index) => {
-                const cardX = useTransform(
-                  x,
-                  [
+                // Cálculo de opacidade/escala para focar no item ativo
+                const range = [
                     -(index + 1) * (cardWidth + cardGap),
                     -index * (cardWidth + cardGap),
                     -(index - 1) * (cardWidth + cardGap)
-                  ],
-                  [0, 1, 1]
-                );
-
-                const opacity = useTransform(cardX, [0, 0.5, 1], [0.3, 0.8, 1]);
-                const scale = useTransform(cardX, [0, 0.5, 1], [0.9, 0.95, 1]);
+                ];
+                
+                const opacity = useTransform(x, range, [0.4, 1, 0.4]); // Itens laterais ficam mais apagados
+                const scale = useTransform(x, range, [0.95, 1, 0.95]); // Itens laterais ficam menores
 
                 return (
                   <motion.div
@@ -172,32 +214,61 @@ export default function News() {
                     className="flex-shrink-0 cursor-grab active:cursor-grabbing"
                     style={{
                       width: cardWidth,
-                      opacity,
-                      scale
+                      // Se quiser forçar opacidade 1 no mobile remova a linha abaixo
+                      // opacity: containerWidth < 640 ? 1 : opacity, 
+                      // scale: containerWidth < 640 ? 1 : scale
                     }}
-                    whileHover={{ y: containerWidth < 768 ? 0 : -4 }}
-                    transition={{ duration: 0.2 }}
+                    whileHover={{ y: -8 }}
+                    transition={{ duration: 0.3 }}
                   >
-                    <div className="bg-transparent rounded-2xl duration-300">
-                      <div className="aspect-square rounded-xl bg-gradient-to-br from-white to-gray-600 flex items-center justify-center mb-4 sm:mb-5 overflow-hidden">
-                        <motion.img
-                          src={item.logo}
-                          alt={item.name}
-                          className="w-full h-full object-cover"
-                          whileHover={{ scale: containerWidth < 768 ? 1 : 1.05, rotate: containerWidth < 768 ? 0 : 2 }}
-                          transition={{ duration: 0.3 }}
-                        />
-                      </div>
+                    {/* O CARD DE VIDRO */}
+                    <div className="h-full bg-[#111111] border border-white/5 hover:border-[#FFCC00]/30 rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-colors duration-300 group shadow-2xl relative overflow-hidden">
                       
-                      <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">
-                        {item.name}
-                      </h3>
-                      <p className="text-xs sm:text-sm text-gray-500 mb-2">
-                        {item.description}
-                      </p>
-                      <p className="text-xs sm:text-sm text-gray-700 font-medium leading-relaxed">
-                        {item.result}
-                      </p>
+                      {/* Efeito Glow no Hover do Card */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+                      <div>
+                        {/* Header do Card (Img + Nome) */}
+                        <div className="flex items-center gap-4 mb-6">
+                            <div className="w-14 h-14 rounded-full bg-gray-800 overflow-hidden border border-white/10 group-hover:border-[#FFCC00] transition-colors">
+                                <motion.img
+                                src={item.logo}
+                                alt={item.name}
+                                className="w-full h-full object-cover"
+                                />
+                            </div>
+                            <div>
+                                <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-[#FFCC00] transition-colors">
+                                    {item.name}
+                                </h3>
+                                <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">
+                                    {item.description}
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Resultado (Destaque) */}
+                        <div className="mb-6">
+                            <p className="text-2xl sm:text-3xl font-bold text-white leading-tight">
+                                {item.result}
+                            </p>
+                        </div>
+                      </div>
+
+                      {/* Footer do Card (Tags) */}
+                      <div className="flex flex-wrap gap-2 mt-auto">
+                        {item.tags.map(tag => (
+                             <span key={tag} className="text-[10px] sm:text-xs font-medium px-3 py-1.5 rounded-full bg-white/5 text-gray-400 border border-white/5">
+                                {tag}
+                             </span>
+                        ))}
+                      </div>
+
+                      {/* Ícone decorativo de "Up" */}
+                      <div className="absolute top-6 right-6 text-gray-800 group-hover:text-[#FFCC00]/20 transition-colors">
+                        <TrendingUp className="w-8 h-8 opacity-50" />
+                      </div>
+
                     </div>
                   </motion.div>
                 );
@@ -205,30 +276,8 @@ export default function News() {
             </motion.div>
           </div>
 
-          {/* Navigation Buttons - Hidden on mobile, visible on tablet and desktop */}
-          <div className="flex justify-center sm:justify-end gap-2 mt-6 sm:mt-8">
-            <motion.button
-              onClick={handlePrev}
-              disabled={currentIndex === 0}
-              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center text-white transition-colors duration-200"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-            </motion.button>
-            <motion.button
-              onClick={handleNext}
-              disabled={currentIndex >= maxIndex}
-              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center text-white transition-colors duration-200"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
-            </motion.button>
-          </div>
-
-          {/* Progress Dots - Always visible, smaller on mobile */}
-          <div className="flex justify-center gap-1.5 sm:gap-2 mt-4 sm:mt-6">
+          {/* Dots de Progresso (Visível sempre, mas útil no mobile) */}
+          <div className="flex justify-center gap-2 mt-10">
             {Array.from({ length: maxIndex + 1 }).map((_, index) => (
               <motion.button
                 key={index}
@@ -236,20 +285,30 @@ export default function News() {
                   setCurrentIndex(index);
                   animate(x, -index * (cardWidth + cardGap), {
                     type: "spring",
-                    stiffness: 300,
-                    damping: 30
+                    stiffness: 200,
+                    damping: 25
                   });
                 }}
-                className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
+                className={`h-1.5 rounded-full transition-all duration-300 ${
                   index === currentIndex 
-                    ? 'w-6 sm:w-8 bg-gray-700' 
-                    : 'w-1.5 sm:w-2 bg-gray-300 hover:bg-gray-400'
+                    ? 'w-8 bg-[#FFCC00] shadow-[0_0_10px_#FFCC00]' // Ativo Amarelo Neon
+                    : 'w-2 bg-gray-700 hover:bg-gray-500' // Inativo Dark
                 }`}
-                whileHover={{ scale: 1.2 }}
                 whileTap={{ scale: 0.9 }}
               />
             ))}
           </div>
+
+           {/* Botões Mobile (Opcional - se quiser setas no mobile abaixo dos cards) */}
+           <div className="flex sm:hidden justify-center gap-4 mt-6">
+                <button onClick={handlePrev} disabled={currentIndex === 0} className="p-3 rounded-full bg-white/5 border border-white/10 text-white disabled:opacity-30">
+                    <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button onClick={handleNext} disabled={currentIndex >= maxIndex} className="p-3 rounded-full bg-white/5 border border-white/10 text-white disabled:opacity-30">
+                    <ChevronRight className="w-5 h-5" />
+                </button>
+           </div>
+
         </div>
       </div>
     </section>
