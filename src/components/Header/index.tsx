@@ -84,9 +84,7 @@ export function Header() {
                   alt="Tegbe Logo"
                   width={150}
                   height={50}
-                  // Adicionei brightness-0 invert para garantir que o logo fique BRANCO se o SVG for preto
-                  // Se o SVG já for colorido/branco, pode remover essa classe.
-                  className="object-contain w-32 md:w-40 transition-opacity group-hover:opacity-80"
+                  className="brightness-0 invert object-contain w-32 md:w-40 transition-opacity group-hover:opacity-80"
                 />
             </a>
             
@@ -94,13 +92,13 @@ export function Header() {
             <nav className="hidden md:flex items-center gap-8 ml-8">
               {[
                 { name: "Home", id: "/" },
+                { name: "E-commerce", id: "ecommerce" },
+                { name: "Marketing", id: "marketing" },
                 { name: "Sobre", id: "sobre" },
-                { name: "Soluções", id: "solucoes" },
-                { name: "Cases", id: "cases" },
               ].map((item) => (
                 <a
                   key={item.name}
-                  href={item.id === "/" ? "/" : `#${item.id}`}
+                  href={item.id === "/" ? "/" : `${item.id}`}
                   className="text-sm font-medium text-gray-400 hover:text-white transition-colors relative group"
                   onClick={(e) => handleNavClick(e, item.id)}
                 >
@@ -114,13 +112,15 @@ export function Header() {
           {/* --- AÇÕES (DIREITA) --- */}
           <div className="hidden md:flex items-center gap-6">
             {/* Badge Consultor (Opcional - Mantive pois dá autoridade) */}
-            <Image 
+            <a href="consultor-oficial">
+              <Image 
               src="/logo-consultoria.svg" 
               alt="Consultor Oficial" 
               width={40} 
               height={40} 
               className="opacity-80 hover:opacity-100 transition-opacity" 
             />
+            </a>
 
             <a
     href="https://api.whatsapp.com/send?phone=5514991779502"
@@ -137,7 +137,6 @@ export function Header() {
       <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/30 to-transparent z-10" />
       
       <span className="relative z-20 flex items-center gap-2">
-        <Icon icon="ic:baseline-whatsapp" className="size-5" />
         <span className="tracking-wide">AGENDAR DIAGNÓSTICO</span>
       </span>
     </button>
@@ -171,9 +170,9 @@ export function Header() {
         <nav className="flex flex-col items-center py-8 space-y-6">
           {[
             { name: "Home", id: "/" },
+            { name: "E-commerce", id: "ecommerce" },
+            { name: "Marketing", id: "marketing" },
             { name: "Sobre", id: "sobre" },
-            { name: "Soluções", id: "solucoes" },
-            { name: "Cases", id: "cases" },
           ].map((item) => (
              <a
               key={item.name}
@@ -193,7 +192,6 @@ export function Header() {
               onClick={() => setMenuOpen(false)}
             >
               <Button className="w-full shadow-lg bg-[#FFCC00] text-black font-bold hover:bg-[#E6B800] h-12 rounded-full text-base">
-                <Icon icon="ic:baseline-whatsapp" className="size-5 mr-2" />
                 Fale com a gente
               </Button>
             </a>
